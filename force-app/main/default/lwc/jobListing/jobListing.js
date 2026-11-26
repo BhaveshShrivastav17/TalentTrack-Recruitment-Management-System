@@ -1,42 +1,26 @@
-import getAllCandidates from '@salesforce/apex/JobListingController.getAllCandidates';
-// Import LightningElement to create our component
-// Import wire to fetch Salesforce records automatically
 import { LightningElement, wire } from 'lwc';
 
-// Import Apex method that fetches all Open Jobs
+import getAllCandidates from '@salesforce/apex/JobListingController.getAllCandidates';
 import getOpenJobs from '@salesforce/apex/JobListingController.getOpenJobs';
-
-// Import Apex method to fetch eligible candidates
 import getEligibleCandidates from '@salesforce/apex/JobListingController.getEligibleCandidates';
-
-// Import Apex method to create a job application
 import submitApplication from '@salesforce/apex/JobListingController.submitApplication';
-
-// Import Salesforce toast notifications
-import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-
-// Import Apex method to fetch a candidate's application history
 import getCandidateApplications from '@salesforce/apex/JobListingController.getCandidateApplications';
 
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class JobListing extends LightningElement {
 
-    // Stores all jobs received from Salesforce
-    jobs;
+    // ==========================================
+    // JOB DATA
+    // ==========================================
 
-    // Stores any error received while fetching jobs
+    jobs = [];
     error;
-
-    // Controls the loading spinner
     isLoading = true;
 
-    // Stores the text entered in the search box
     searchKey = '';
-
-    // Stores the department selected in the dropdown
     selectedDepartment = '';
 
-    // Department options displayed in the dropdown
     departmentOptions = [
         { label: 'All Departments', value: '' },
         { label: 'IT', value: 'IT' },
@@ -45,288 +29,365 @@ export default class JobListing extends LightningElement {
         { label: 'Sales', value: 'Sales' }
     ];
 
-    // Stores candidates available for applying
-    candidateOptions = [];
+    // ==========================================
+    // CANDIDATE DATA
+    // ==========================================
 
+    candidateOptions = [];
     statusCandidateOptions = [];
 
-    // Stores the candidate selected for checking application status
+    selectedCandidateId = '';
     selectedStatusCandidateId = '';
 
-    // Stores the applications retrieved from Salesforce
+    // ==========================================
+    // APPLICATION DATA
+    // ==========================================
+
     candidateApplications = [];
 
-    // Controls visibility of application history
     showApplicationStatus = false;
-
-    // Controls the loading spinner for application history
     isLoadingApplications = false;
-
-    // Stores the selected job record ID
-    selectedJobId;
-
-    // Stores the selected candidate record ID
-    selectedCandidateId = '';
-
-    // Controls visibility of the application form
-    showApplyForm = false;
-
-    // Controls the submission loading state
     isSubmitting = false;
 
+    // ==========================================
+    // JOB DETAILS AND APPLICATION FORM
+    // ==========================================
 
-    // Fetch eligible candidates from Salesforce
+    selectedJob = null;
+    selectedJobId = '';
+
+    showJobDetails = false;
+    showApplyForm = false;
+
+    // ==========================================
+    // FETCH ELIGIBLE CANDIDATES
+    // ==========================================
+
     @wire(getEligibleCandidates)
     wiredCandidates({ data, error }) {
 
         if (data) {
-
-            // Convert candidate records into dropdown options
             this.candidateOptions = data.map(candidate => ({
-                label: candidate.First_Name__c + ' ' + candidate.Last_Name__c,
+                label: `${candidate.First_Name__c || ''} ${candidate.Last_Name__c || ''}`.trim(),
                 value: candidate.Id
             }));
 
         } else if (error) {
-
-            console.error('Error fetching candidates:', error);
+            console.error('Error fetching eligible candidates:', error);
         }
     }
 
+    // ==========================================
+    // FETCH ALL CANDIDATES
+    // ==========================================
+
     @wire(getAllCandidates)
     wiredAllCandidates({ data, error }) {
+
         if (data) {
             this.statusCandidateOptions = data.map(candidate => ({
-                label: candidate.First_Name__c + ' ' + candidate.Last_Name__c,
+                label: `${candidate.First_Name__c || ''} ${candidate.Last_Name__c || ''}`.trim(),
                 value: candidate.Id
             }));
+
         } else if (error) {
             console.error('Error fetching all candidates:', error);
         }
     }
 
-    // Fetch Open Jobs from the Apex controller
+    // ==========================================
+    // FETCH OPEN JOBS
+    // ==========================================
+
     @wire(getOpenJobs)
     wiredJobs({ data, error }) {
 
-        // Stop displaying the loading spinner
         this.isLoading = false;
 
         if (data) {
-            // Store the jobs returned by Salesforce
             this.jobs = data;
             this.error = undefined;
 
         } else if (error) {
-            // Store the error if job fetching fails
+            this.jobs = [];
             this.error = error;
-            this.jobs = undefined;
 
             console.error('Error fetching jobs:', error);
         }
     }
 
-    // Runs whenever the user types in the search box
-    handleSearch(event) {
+    // ==========================================
+    // SEARCH JOBS
+    // ==========================================
 
-        // Convert the entered text to lowercase
-        // This makes searching case-insensitive
-        this.searchKey = event.target.value.toLowerCase();
+    handleSearch(event) {
+        this.searchKey = (event.target.value || '').trim().toLowerCase();
     }
 
-    // Runs whenever the user selects a department
-    handleDepartmentChange(event) {
+    // ==========================================
+    // FILTER BY DEPARTMENT
+    // ==========================================
 
-        // Store the selected department
+    handleDepartmentChange(event) {
         this.selectedDepartment = event.detail.value;
     }
 
-    // Returns jobs matching both the search and department filters
+    // ==========================================
+    // FILTERED JOBS
+    // ==========================================
+
     get filteredJobs() {
 
-        // If jobs have not loaded, return an empty list
         if (!this.jobs) {
             return [];
         }
 
-        // Filter the jobs based on the selected conditions
         return this.jobs.filter(job => {
 
-            // Check whether the job title contains the search text
-            const matchesTitle = (job.Job_Title__c || '')
-                .toLowerCase()
-                .includes(this.searchKey);
+            const jobTitle = (job.Job_Title__c || '').toLowerCase();
 
-            // Check whether the job belongs to the selected department
-            // If All Departments is selected, show every department
+            const matchesTitle = jobTitle.includes(this.searchKey);
+
             const matchesDepartment =
                 !this.selectedDepartment ||
                 job.Department__c === this.selectedDepartment;
 
-            // A job must satisfy BOTH conditions to be displayed
             return matchesTitle && matchesDepartment;
         });
     }
 
+    get hasJobs() {
+        return !this.isLoading &&
+            !this.error &&
+            this.filteredJobs.length > 0;
+    }
 
-    // Runs when a candidate clicks Apply for Job
+    get hasNoOpenJobs() {
+        return !this.isLoading &&
+            !this.error &&
+            this.jobs.length === 0;
+    }
+
+    get hasNoMatchingJobs() {
+        return !this.isLoading &&
+            !this.error &&
+            this.jobs.length > 0 &&
+            this.filteredJobs.length === 0;
+    }
+
+    get hasJobError() {
+        return !this.isLoading && !!this.error;
+    }
+
+    // ==========================================
+    // VIEW JOB DETAILS
+    // ==========================================
+
+    handleViewDetails(event) {
+
+        const jobId = event.currentTarget.dataset.jobId;
+
+        this.selectedJob = this.jobs.find(job => job.Id === jobId);
+
+        if (this.selectedJob) {
+            this.showJobDetails = true;
+            this.showApplyForm = false;
+            this.selectedJobId = '';
+            this.selectedCandidateId = '';
+        }
+    }
+
+    handleCloseDetails() {
+        this.showJobDetails = false;
+        this.selectedJob = null;
+    }
+
+    // ==========================================
+    // APPLY FOR JOB
+    // ==========================================
+
     handleApplyClick(event) {
 
-        // Get the ID of the job whose Apply button was clicked
-        this.selectedJobId = event.currentTarget.dataset.jobId;
+        const jobId = event.currentTarget.dataset.jobId;
 
-        // Reset previous candidate selection
-        this.selectedCandidateId = '';
+        const job = this.jobs.find(item => item.Id === jobId);
 
-        // Display the application form
-        this.showApplyForm = true;
-    }
-
-
-    // Runs when a candidate is selected from the dropdown
-    handleCandidateChange(event) {
-
-        // Store the selected Candidate record ID
-        this.selectedCandidateId = event.detail.value;
-    }
-
-
-    // Runs when the candidate submits the application
-    async handleSubmitApplication() {
-
-        // Check whether a candidate has been selected
-        if (!this.selectedCandidateId) {
-
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: 'Missing Information',
-                    message: 'Please select a candidate.',
-                    variant: 'warning'
-                })
+        if (!job) {
+            this.showToast(
+                'Job Not Found',
+                'The selected job could not be found. Please refresh the page and try again.',
+                'error'
             );
-
             return;
         }
 
-        // Display loading state
+        this.selectedJobId = jobId;
+        this.selectedJob = job;
+        this.selectedCandidateId = '';
+
+        this.showJobDetails = false;
+        this.showApplyForm = true;
+    }
+
+    // ==========================================
+    // CANCEL APPLICATION FORM
+    // ==========================================
+
+    handleCancelApplication() {
+
+        if (this.isSubmitting) {
+            return;
+        }
+
+        this.showApplyForm = false;
+        this.selectedCandidateId = '';
+        this.selectedJobId = '';
+        this.selectedJob = null;
+    }
+
+    // ==========================================
+    // SELECT CANDIDATE
+    // ==========================================
+
+    handleCandidateChange(event) {
+        this.selectedCandidateId = event.detail.value;
+    }
+
+    // ==========================================
+    // SUBMIT JOB APPLICATION
+    // ==========================================
+
+    async handleSubmitApplication() {
+
+        if (!this.selectedJobId) {
+            this.showToast(
+                'Missing Information',
+                'Please select a job before applying.',
+                'warning'
+            );
+            return;
+        }
+
+        if (!this.selectedCandidateId) {
+            this.showToast(
+                'Missing Information',
+                'Please select a candidate.',
+                'warning'
+            );
+            return;
+        }
+
         this.isSubmitting = true;
+
+        const candidateId = this.selectedCandidateId;
 
         try {
 
-            // Call Apex to create the Application record
+            // Existing Apex operation and parameter names are unchanged.
             await submitApplication({
                 jobId: this.selectedJobId,
-                candidateId: this.selectedCandidateId
+                candidateId: candidateId
             });
 
-            // Refresh application history if this candidate is selected
-            if (this.selectedStatusCandidateId === this.selectedCandidateId) {
-                try {
-                    const result = await getCandidateApplications({
-                        candidateId: this.selectedStatusCandidateId
-                    });
-                    this.candidateApplications = result;
-                } catch (error) {
-                    console.error('Error refreshing application history:', error);
-                }
+            // Refresh application history if this candidate
+            // is already selected in the tracker.
+            if (this.selectedStatusCandidateId === candidateId) {
+                await this.loadCandidateApplications(
+                    candidateId,
+                    false
+                );
             }
 
-            // Show success notification
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: 'Application Submitted',
-                    message: 'Your job application was submitted successfully!',
-                    variant: 'success'
-                })
+            this.showToast(
+                'Application Submitted',
+                'Your job application was submitted successfully!',
+                'success'
             );
 
-            // Close the application form
             this.showApplyForm = false;
-
-            // Reset selected candidate
             this.selectedCandidateId = '';
+            this.selectedJobId = '';
+            this.selectedJob = null;
 
         } catch (error) {
 
-            // Print the complete error in the browser console
-            console.error('Application Submission Error:', error);
+            console.error('Application submission error:', error);
 
-            // Extract the actual Salesforce error message
-            const errorMessage =
-                error.body?.message ||
-                error.body?.pageErrors?.map(e => e.message).join(', ') ||
-                error.message ||
-                JSON.stringify(error);
-
-            // Display the actual error to the user
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: 'Application Failed',
-                    message: errorMessage,
-                    variant: 'error',
-                    mode: 'sticky'
-                })
+            this.showToast(
+                'Application Failed',
+                this.getErrorMessage(error),
+                'error'
             );
 
         } finally {
-
-            // Stop loading
             this.isSubmitting = false;
         }
     }
 
+    // ==========================================
+    // SELECT CANDIDATE TO TRACK APPLICATIONS
+    // ==========================================
 
-
-
-    // Runs when a candidate is selected to view application status
     async handleStatusCandidateChange(event) {
 
-        // Store the selected candidate ID
         this.selectedStatusCandidateId = event.detail.value;
 
-        // Clear previously displayed applications
         this.candidateApplications = [];
 
-        // Display the application history section
+        if (!this.selectedStatusCandidateId) {
+            this.showApplicationStatus = false;
+            return;
+        }
+
         this.showApplicationStatus = true;
 
-        // Display loading spinner
+        await this.loadCandidateApplications(
+            this.selectedStatusCandidateId
+        );
+    }
+
+    // ==========================================
+    // LOAD APPLICATION HISTORY
+    // ==========================================
+
+    async loadCandidateApplications(candidateId, showErrorToast = true) {
+
         this.isLoadingApplications = true;
 
         try {
 
-            // Fetch applications belonging to the selected candidate
+            // Existing Apex operation and parameter name are unchanged.
             const result = await getCandidateApplications({
-                candidateId: this.selectedStatusCandidateId
+                candidateId: candidateId
             });
 
-            // Store the retrieved application records
-            this.candidateApplications = result;
+            this.candidateApplications = result || [];
 
         } catch (error) {
 
-            // Log the actual error
-            console.error('Error fetching applications:', error);
+            console.error('Error fetching application history:', error);
 
-            // Display error notification
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: 'Error',
-                    message: error.body?.message || 'Unable to fetch application history.',
-                    variant: 'error'
-                })
-            );
+            this.candidateApplications = [];
+
+            if (showErrorToast) {
+                this.showToast(
+                    'Unable to Load Applications',
+                    this.getErrorMessage(error),
+                    'error'
+                );
+            }
 
         } finally {
-
-            // Stop the loading spinner
             this.isLoadingApplications = false;
         }
     }
 
+    // ==========================================
+    // APPLICATION HISTORY GETTERS
+    // ==========================================
 
     get hasApplications() {
-        return this.candidateApplications && this.candidateApplications.length > 0;
+        return this.candidateApplications.length > 0;
     }
 
     get hasNoApplications() {
@@ -335,21 +396,42 @@ export default class JobListing extends LightningElement {
             !this.hasApplications;
     }
 
+    // ==========================================
+    // TOAST NOTIFICATIONS
+    // ==========================================
 
-    selectedJob;
-    showJobDetails = false;
+    showToast(title, message, variant) {
 
-    handleViewDetails(event) {
-        const jobId = event.currentTarget.dataset.jobId;
-
-        this.selectedJob = this.jobs.find(job => job.Id === jobId);
-        this.showJobDetails = true;
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: title,
+                message: message,
+                variant: variant,
+                mode: 'dismissible'
+            })
+        );
     }
 
-    handleCloseDetails() {
-        this.showJobDetails = false;
-        this.selectedJob = null;
+    // ==========================================
+    // ERROR MESSAGE HANDLING
+    // ==========================================
+
+    getErrorMessage(error) {
+
+        if (error?.body?.message) {
+            return error.body.message;
+        }
+
+        if (error?.body?.pageErrors?.length) {
+            return error.body.pageErrors
+                .map(item => item.message)
+                .join(', ');
+        }
+
+        if (error?.message) {
+            return error.message;
+        }
+
+        return 'An unexpected error occurred. Please try again.';
     }
-
-
 }

@@ -1,10 +1,9 @@
 
 public with sharing class JobListingController {
 
-    // Fetch open jobs using the current user's permissions
+    // Fetch all Open Jobs
     @AuraEnabled(cacheable=true)
     public static List<Job__c> getOpenJobs() {
-
         return [
             SELECT Id,
                    Name,
@@ -23,10 +22,9 @@ public with sharing class JobListingController {
         ];
     }
 
-    // Fetch eligible candidates
+    // Fetch Candidates who are eligible to apply
     @AuraEnabled(cacheable=true)
     public static List<Candidate__c> getEligibleCandidates() {
-
         return [
             SELECT Id,
                    First_Name__c,
@@ -38,7 +36,7 @@ public with sharing class JobListingController {
         ];
     }
 
-    // Submit a new job application
+    // Create a new Job Application
     @AuraEnabled
     public static void submitApplication(Id jobId, Id candidateId) {
 
@@ -48,26 +46,35 @@ public with sharing class JobListingController {
             );
         }
 
-        Application__c newApplication = new Application__c(
-            Job__c = jobId,
-            Candidate__c = candidateId,
-            Application_Status__c = 'Applied'
-        );
+        // Check for an existing application
+        List<Application__c> existingApplications = [
+            SELECT Id
+            FROM Application__c
+            WHERE Job__c = :jobId
+            AND Candidate__c = :candidateId
+            WITH USER_MODE
+            LIMIT 1
+        ];
 
-        try {
-            insert as user newApplication;
-        } catch (DmlException e) {
+        if (!existingApplications.isEmpty()) {
             throw new AuraHandledException(
-                'Unable to submit application. Please check your access and the selected records.'
+                'This candidate has already applied for this job.'
             );
         }
+
+        // Create the Application record
+        Application__c newApplication = new Application__c();
+        newApplication.Job__c = jobId;
+        newApplication.Candidate__c = candidateId;
+        newApplication.Application_Status__c = 'Applied';
+
+        // Insert using the current user's permissions
+        insert as user newApplication;
     }
 
-    // Fetch applications belonging to a selected candidate
+    // Fetch all applications belonging to a selected candidate
     @AuraEnabled
-    public static List<Application__c> getCandidateApplications(
-        Id candidateId
-    ) {
+    public static List<Application__c> getCandidateApplications(Id candidateId) {
 
         if (candidateId == null) {
             return new List<Application__c>();
@@ -86,10 +93,9 @@ public with sharing class JobListingController {
         ];
     }
 
-    // Fetch all candidates visible to the current user
+    // Fetch all Candidates
     @AuraEnabled(cacheable=true)
     public static List<Candidate__c> getAllCandidates() {
-
         return [
             SELECT Id,
                    First_Name__c,
