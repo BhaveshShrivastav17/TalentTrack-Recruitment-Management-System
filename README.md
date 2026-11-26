@@ -97,7 +97,7 @@ force-app/
         └── triggers/
 
 
-
+```
 ## Learning Outcomes
 This project demonstrates practical experience with Salesforce development, Apex programming, SOQL, Lightning Web Components, automation, security configuration, and recruitment business processes.
 
