@@ -1,83 +1,54 @@
 # TalentTrack – Recruitment Management System
 
-TalentTrack is a Salesforce-based Recruitment Management System designed to simplify and automate the recruitment process. It helps recruiters manage job openings, candidates, applications, and interviews in one centralized platform.
+A Salesforce-based Recruitment Management System designed to streamline job postings, candidate management, application tracking, and interview scheduling.
+
+TalentTrack demonstrates practical Salesforce development using Apex, Lightning Web Components (LWC), SOQL, automation, and Salesforce security features.
+
+## Project Overview
+
+TalentTrack helps manage the recruitment lifecycle within Salesforce, from creating job openings to tracking candidates and managing interviews.
+
+The application uses custom Salesforce objects, Apex triggers, Lightning Web Components, Flows, and reports to support recruitment operations.
 
 ## Key Features
 
-- **Job Management:** Create and manage job openings, departments, locations, salaries, and application deadlines.
-- **Candidate Management:** Maintain candidate profiles, skills, education, experience, and contact details.
-- **Application Management:** Track applications through Applied, Under Review, Shortlisted, Interview Scheduled, Selected, and Rejected stages.
-- **Interview Management:** Schedule interviews, record feedback, assign scores, and manage interview statuses.
-- **Job Listing Component:** Custom Lightning Web Component (LWC) for searching and filtering jobs, viewing job details, submitting applications, and checking application status.
+- **Job Management:** Create and manage job openings, including job details and deadlines.
+- **Candidate Management:** Maintain candidate information and track candidate records.
+- **Application Tracking:** Manage applications and monitor their recruitment status.
+- **Interview Management:** Schedule and manage candidate interviews.
+- **Job Listing Interface:** Display job listings through a custom Lightning Web Component.
+- **Process Automation:** Use Apex triggers and Salesforce Flows to automate recruitment-related processes.
+- **Scheduled Processing:** Use Apex Scheduler for automated job deadline processing.
+- **Reports and Dashboard:** View recruitment data and monitor application statistics.
+- **Data Security:** Apply Salesforce sharing rules and secure Apex data access.
 
-## Salesforce Technologies Used
+## Technology Stack
 
 | Technology | Purpose |
 |---|---|
-| Salesforce Lightning Experience | User interface |
-| Apex | Business logic |
-| Apex Triggers | Data validation and automation |
-| SOQL | Query Salesforce records |
-| Lightning Web Components | Custom job listing interface |
-| Salesforce Flows | Record automation |
-| Validation Rules | Data integrity |
-| Reports and Dashboards | Recruitment analytics |
-| Role Hierarchy and Sharing Rules | Record-level security |
+| Salesforce Platform | Application development |
+| Apex | Business logic and server-side processing |
+| SOQL | Salesforce data queries |
+| Lightning Web Components | User interface |
+| Salesforce Flows | Process automation |
+| Apex Triggers | Record-based automation |
+| Apex Scheduler | Scheduled processing |
+| Salesforce Reports & Dashboards | Data analysis and visualization |
+| Salesforce CLI | Deployment and development |
+| Git & GitHub | Version control and source management |
 
-## Data Model
+## Salesforce Data Model
 
-The project contains four custom objects:
+The project uses four main custom objects:
 
-- **Job__c:** Stores job openings and job details.
-- **Candidate__c:** Stores candidate information.
-- **Application__c:** Connects candidates with jobs and tracks application progress.
-- **Interview__c:** Stores interview schedules, feedback, and scores.
+| Custom Object | Purpose |
+|---|---|
+| `Job__c` | Stores job opening information |
+| `Candidate__c` | Stores candidate details |
+| `Application__c` | Tracks candidate applications |
+| `Interview__c` | Manages interview information |
 
-### Relationships
-
-- Application has a lookup relationship with Candidate.
-- Application has a lookup relationship with Job.
-- Interview has a lookup relationship with Candidate.
-- Interview has a lookup relationship with Application.
-
-## Automation and Business Logic
-
-- Automatically populates the application date.
-- Prevents duplicate applications for the same job.
-- Allows applications only for open jobs.
-- Prevents inactive, blacklisted, or hired candidates from applying.
-- Updates candidate status to Hired when an application is selected.
-- Automatically updates application status based on interview progress and scores.
-- Prevents duplicate and conflicting interview schedules.
-- Validates interview scores and completed interview feedback.
-- Automatically closes jobs after their application deadline using scheduled Apex.
-
-## Reports and Dashboard
-
-The project includes recruitment reports for:
-
-- Candidates by Status
-- Applications by Status
-- Jobs by Department
-- Upcoming Interviews
-
-A centralized **TalentTrack Recruitment Dashboard** provides a visual overview of recruitment activity.
-
-## Security and Access Management
-
-- Configured Organization-Wide Defaults (OWD).
-- Implemented role hierarchy.
-- Created a Recruitment Team profile.
-- Configured criteria-based sharing rules.
-- Applied object-level and field-level security.
-
-## Apex Testing
-
-- Application Trigger Test Class
-- Interview Trigger Test Class
-- 29 test methods passed.
-- 0 test failures.
-- 86% org-wide Apex code coverage at the time of testing.
+These objects work together to represent the recruitment lifecycle.
 
 ## Project Structure
 
@@ -93,11 +64,122 @@ force-app/
         ├── lwc/
         │   └── jobListing/
         ├── objects/
+        ├── reports/
+        ├── sharingRules/
         ├── tabs/
         └── triggers/
 ```
+
+## Apex Development
+
+The project uses Apex classes, triggers, and test classes to implement recruitment business logic.
+
+Key development areas include:
+
+- Trigger-based automation.
+- Separation of trigger logic using handler classes.
+- SOQL queries and DML operations.
+- Scheduled Apex processing.
+- Exception handling and business rule enforcement.
+- Apex unit testing.
+
+## Security Implementation
+
+Security is an important part of the application.
+
+- Apex controller uses `with sharing`.
+- SOQL queries use `WITH USER_MODE`.
+- DML operations use user-mode access.
+- Salesforce sharing rules help manage record access.
+- Sensitive authentication information is excluded from source control.
+
+## Testing Results
+
+All 29 Apex tests passed successfully.
+
+| Test Metric | Result |
+|---|---:|
+| Tests Run | 29 |
+| Passed | 29 |
+| Failed | 0 |
+| Pass Rate | 100% |
+
+## Setup and Deployment
+
+### Prerequisites
+
+- Salesforce Developer Org
+- Salesforce CLI
+- Visual Studio Code
+- Salesforce Extension Pack
+- Git
+
+### Steps
+
+**1. Clone the repository**
+
+```bash
+git clone https://github.com/BhaveshShrivastav17/TalentTrack-Recruitment-Management-System.git
+```
+
+**2. Navigate to the project**
+
+```bash
+cd TalentTrack-Recruitment-Management-System
+```
+
+**3. Authorize your Salesforce org**
+
+```bash
+sf org login web
+```
+
+**4. Deploy the Salesforce source**
+
+```bash
+sf project deploy start --source-dir force-app/main/default
+```
+
+**5. Run Apex tests**
+
+```bash
+sf apex run test --test-level RunLocalTests --wait 10
+```
+
+*Note: Deployment and test execution require an authorized Salesforce org with the appropriate permissions.*
+
 ## Learning Outcomes
-This project demonstrates practical experience with Salesforce development, Apex programming, SOQL, Lightning Web Components, automation, security configuration, and recruitment business processes.
+
+Through this project, I gained practical experience in:
+
+- Salesforce Administration and Development.
+- Apex programming and trigger frameworks.
+- SOQL and Salesforce data modeling.
+- Lightning Web Component development.
+- Salesforce automation using Flows and Apex.
+- Apex testing and debugging.
+- Salesforce security and access control.
+- Source control and deployment using Git and Salesforce CLI.
+
+## Future Enhancements
+
+- Candidate self-service application portal.
+- Email notifications for interview scheduling.
+- Advanced recruitment analytics.
+- Enhanced candidate filtering and search.
 
 ## Author
-Developed as a Salesforce portfolio project.
+
+**Bhavesh Shrivastav**
+
+Aspiring Software Developer | Java & Salesforce
+
+A postgraduate (M.Sc. IT) fresher interested in building software applications and developing skills in Java programming and Salesforce development.
+
+Currently seeking entry-level opportunities as a **Java Developer** or **Salesforce Developer**.
+
+[GitHub Profile](https://github.com/BhaveshShrivastav17)
+
+---
+
+*TalentTrack – Simplifying the recruitment management process with Salesforce.*
