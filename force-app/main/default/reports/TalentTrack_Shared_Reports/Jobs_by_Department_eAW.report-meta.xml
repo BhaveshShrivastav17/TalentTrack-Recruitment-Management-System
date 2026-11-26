@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>CUST_NAME</field>
+    </columns>
+    <columns>
+        <field>Job__c.Job_Title__c</field>
+    </columns>
+    <columns>
+        <field>Job__c.Department__c</field>
+    </columns>
+    <columns>
+        <field>Job__c.Location__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Job__c.Salary__c</field>
+    </columns>
+    <columns>
+        <field>Job__c.Job_Type__c</field>
+    </columns>
+    <columns>
+        <field>Job__c.Job_Status__c</field>
+    </columns>
+    <columns>
+        <field>Job__c.Experience_Required__c</field>
+    </columns>
+    <columns>
+        <field>Job__c.Posted_Date__c</field>
+    </columns>
+    <columns>
+        <field>Job__c.Application_Deadline__c</field>
+    </columns>
+    <description>Displays job openings grouped by department, including salary, job type, and status</description>
+    <format>Tabular</format>
+    <name>Jobs by Department</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>CustomEntity$Job__c</reportType>
+    <scope>user</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>Job__c.Application_Deadline__c</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

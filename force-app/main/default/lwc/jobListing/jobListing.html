@@ -1,0 +1,262 @@
+<template>
+
+    <!-- Main card displaying the available jobs section -->
+    <lightning-card title="TalentTrack - Available Jobs" icon-name="standard:work_order">
+
+        <div class="slds-p-around_medium">
+
+            <!-- Search box: Search jobs using their title -->
+            <lightning-input type="search" label="Search Jobs by Title" placeholder="Enter job title..."
+                onchange={handleSearch} class="slds-m-bottom_medium">
+            </lightning-input>
+
+            <!-- Department dropdown: Filter jobs by department -->
+            <lightning-combobox label="Filter by Department" placeholder="Select a department"
+                options={departmentOptions} value={selectedDepartment} onchange={handleDepartmentChange}>
+            </lightning-combobox>
+
+            <!-- Display loading spinner while jobs are being fetched -->
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading jobs">
+                </lightning-spinner>
+            </template>
+
+            <!-- Display job records after they are loaded -->
+            <template if:true={jobs}>
+
+                <!-- Loop through jobs after applying search and department filters -->
+                <template for:each={filteredJobs} for:item="job">
+
+                    <!-- Individual job container -->
+                    <div key={job.Id} class="slds-box slds-theme_default slds-m-bottom_medium slds-p-around_large">
+
+                        <!-- Job title -->
+                        <h2 class="slds-text-heading_medium slds-m-bottom_small">
+                            {job.Job_Title__c}
+                        </h2>
+                        <lightning-badge label="Open" class="slds-m-bottom_small">
+                        </lightning-badge>
+
+                        <!-- Job information -->
+                        <p>
+                            <strong>Department:</strong>
+                            {job.Department__c}
+                        </p>
+
+                        <p>
+                            <strong>Location:</strong>
+                            {job.Location__c}
+                        </p>
+
+                        <p>
+                            <strong>Salary:</strong>
+                            {job.Salary__c}
+                        </p>
+
+                        <p>
+                            <strong>Job Type:</strong>
+                            {job.Job_Type__c}
+                        </p>
+
+                        <p>
+                            <strong>Experience:</strong>
+                            {job.Experience_Required__c}
+                        </p>
+
+                        <p>
+                            <strong>Deadline:</strong>
+                            {job.Application_Deadline__c}
+                        </p>
+
+                        <!-- Job description -->
+                        <div class="slds-m-top_small">
+                            {job.Job_Description__c}
+                        </div>
+
+                        <!-- Apply button for this job -->
+                        <div class="slds-m-top_medium">
+                            <lightning-button label="Apply for Job" variant="brand" data-job-id={job.Id}
+                                onclick={handleApplyClick}>
+                            </lightning-button>
+                            <lightning-button label="View Details" variant="neutral" data-job-id={job.Id}
+                                onclick={handleViewDetails}>
+                            </lightning-button>
+                        </div>
+
+                    </div>
+
+                </template>
+
+                <template if:true={showJobDetails}>
+                    <div class="slds-box slds-theme_shade slds-m-top_medium">
+
+                        <h2 class="slds-text-heading_medium slds-m-bottom_medium">
+                            Job Details
+                        </h2>
+
+                        <p><strong>Job Title:</strong> {selectedJob.Job_Title__c}</p>
+                        <p><strong>Department:</strong> {selectedJob.Department__c}</p>
+                        <p><strong>Location:</strong> {selectedJob.Location__c}</p>
+                        <p><strong>Salary:</strong> {selectedJob.Salary__c}</p>
+                        <p><strong>Experience:</strong> {selectedJob.Experience_Required__c}</p>
+                        <p><strong>Job Type:</strong> {selectedJob.Job_Type__c}</p>
+                        <p><strong>Application Deadline:</strong> {selectedJob.Application_Deadline__c}</p>
+
+                        <div class="slds-m-top_medium">
+                            <strong>Job Description:</strong>
+                            <p>{selectedJob.Job_Description__c}</p>
+                        </div>
+
+                        <lightning-button label="Close Details" variant="neutral" onclick={handleCloseDetails}>
+                        </lightning-button>
+
+                    </div>
+                </template>
+
+
+                <!-- Start displaying jobs -->
+                <template if:true={jobs}>
+
+                    <!-- Loop through filtered jobs -->
+                    <template for:each={filteredJobs} for:item="job">
+
+                        <!-- Your existing job card code stays here -->
+
+                    </template>
+                    <!-- Job loop ends here -->
+
+
+                    <!-- PASTE THE APPLICATION FORM HERE -->
+                    <template if:true={showApplyForm}>
+
+                        <div class="slds-box slds-theme_shade slds-m-top_medium">
+
+                            <h2 class="slds-text-heading_medium slds-m-bottom_medium">
+                                Apply for Job
+                            </h2>
+
+                            <!-- Select candidate -->
+                            <lightning-combobox label="Select Candidate" placeholder="Choose your name"
+                                options={candidateOptions} value={selectedCandidateId} onchange={handleCandidateChange}
+                                required>
+                            </lightning-combobox>
+
+                            <!-- Submit application -->
+                            <div class="slds-m-top_medium">
+                                <lightning-button label="Submit Application" variant="brand"
+                                    onclick={handleSubmitApplication} disabled={isSubmitting}>
+                                </lightning-button>
+                            </div>
+
+                        </div>
+
+                    </template>
+                    <!-- Application form ends here -->
+
+                </template>
+                <!-- End displaying jobs -->
+
+
+
+                <!-- Show message if no jobs match the selected filters -->
+                <template if:false={filteredJobs.length}>
+                    <p class="slds-text-color_weak slds-p-around_medium">
+                        No jobs match your search or selected department.
+                    </p>
+                </template>
+
+            </template>
+
+            <!-- Application Status Section -->
+            <div class="slds-box slds-m-top_large">
+
+                <!-- Section heading -->
+                <h2 class="slds-text-heading_medium slds-m-bottom_medium">
+                    View Application Status
+                </h2>
+
+                <!-- Select candidate to view application history -->
+                <lightning-combobox label="Select Candidate" placeholder="Choose a candidate"
+                    options={statusCandidateOptions} value={selectedStatusCandidateId}
+                    onchange={handleStatusCandidateChange}>
+                </lightning-combobox>
+
+                <!-- Show loading spinner while fetching applications -->
+                <template if:true={isLoadingApplications}>
+                    <lightning-spinner alternative-text="Loading application history">
+                    </lightning-spinner>
+                </template>
+
+                <!-- Display application history -->
+                <template if:true={showApplicationStatus}>
+
+                    <div class="slds-m-top_medium">
+
+                        <h3 class="slds-text-heading_small slds-m-bottom_small">
+                            Application History
+                        </h3>
+
+                        <!-- Loop through candidate applications -->
+                        <template for:each={candidateApplications} for:item="app">
+
+                            <div key={app.Id} class="slds-box slds-m-bottom_small">
+
+                                <!-- Job title -->
+                                <h3 class="slds-text-heading_small">
+                                    {app.Job__r.Job_Title__c}
+                                </h3>
+
+                                <!-- Application ID -->
+                                <p>
+                                    <strong>Application ID:</strong>
+                                    {app.Name}
+                                </p>
+
+                                <!-- Application status -->
+                                <p>
+                                    <strong>Status:</strong>
+                                    {app.Application_Status__c}
+                                </p>
+
+                                <!-- Application date -->
+                                <p>
+                                    <strong>Application Date:</strong>
+                                    {app.Application_Date__c}
+                                </p>
+
+                            </div>
+
+                        </template>
+
+                        <template if:true={hasNoApplications}>
+                            <p class="slds-text-color_weak slds-m-top_medium">
+                                No applications found for this candidate.
+                            </p>
+                        </template>
+
+                    </div>
+
+                </template>
+
+            </div>
+
+
+            <!-- Show message if no jobs are available -->
+            <template if:false={isLoading}>
+                <template if:false={jobs}>
+                    <p>No open jobs found.</p>
+                </template>
+            </template>
+
+            <!-- Display error message if Apex fails to fetch jobs -->
+            <template if:true={error}>
+                <p class="slds-text-color_error">
+                    Unable to load jobs. Please contact the administrator.
+                </p>
+            </template>
+
+        </div>
+
+    </lightning-card>
+
+</template>

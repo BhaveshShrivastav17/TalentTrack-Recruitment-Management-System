@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>All_Interview_Access_for_Recruitmnt_Team</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>Shares all the records with Recruitment Manager and internal subordinates roles.</description>
+        <label>All Interview Access for Recruitmnt Team</label>
+        <sharedTo>
+            <roleAndSubordinatesInternal>Recruitment_Manager</roleAndSubordinatesInternal>
+        </sharedTo>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>notEqual</operation>
+            <value></value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingOwnerRules>
+        <fullName>Recruitment_Team_Interview_Access</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Recruitment Team Interview Access</label>
+        <sharedTo>
+            <roleAndSubordinatesInternal>Recruitment_Manager</roleAndSubordinatesInternal>
+        </sharedTo>
+        <sharedFrom>
+            <roleAndSubordinatesInternal>Recruiter</roleAndSubordinatesInternal>
+        </sharedFrom>
+    </sharingOwnerRules>
+</SharingRules>

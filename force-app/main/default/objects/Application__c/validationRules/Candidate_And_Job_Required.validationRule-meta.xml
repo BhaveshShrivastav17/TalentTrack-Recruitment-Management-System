@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Candidate_And_Job_Required</fullName>
+    <active>true</active>
+    <description>Ensures every application is linked to both Candidate and Job.</description>
+    <errorConditionFormula>OR(
+    ISBLANK(Candidate__c),
+    ISBLANK(Job__c)
+ )</errorConditionFormula>
+    <errorMessage>Please select both a candidate and a Job before saving the application.</errorMessage>
+</ValidationRule>

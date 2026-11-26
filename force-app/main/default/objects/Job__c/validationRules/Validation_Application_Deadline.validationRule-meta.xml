@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validation_Application_Deadline</fullName>
+    <active>true</active>
+    <description>Prevents users from setting an application deadline earlier than the posted date.</description>
+    <errorConditionFormula>AND(
+    NOT(ISBLANK(Posted_Date__c)),
+
+ NOT(ISBLANK(Application_Deadline__c)),
+    Application_Deadline__c &lt; Posted_Date__c
+ )</errorConditionFormula>
+    <errorMessage>Application Deadline cannot be earlier than Posted Date.</errorMessage>
+</ValidationRule>

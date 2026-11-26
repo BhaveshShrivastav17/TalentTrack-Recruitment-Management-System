@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>All_Application_Access_for_Recruitment_Team</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>Share all application records with Recruitment Manager and internal subordinates roles</description>
+        <label>All Application Access for Recruitment Team</label>
+        <sharedTo>
+            <roleAndSubordinatesInternal>Recruitment_Manager</roleAndSubordinatesInternal>
+        </sharedTo>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>notEqual</operation>
+            <value></value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingOwnerRules>
+        <fullName>Recruitment_Team_Application_Access</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Recruitment Team Application Access</label>
+        <sharedTo>
+            <roleAndSubordinatesInternal>Recruitment_Manager</roleAndSubordinatesInternal>
+        </sharedTo>
+        <sharedFrom>
+            <roleAndSubordinatesInternal>Recruiter</roleAndSubordinatesInternal>
+        </sharedFrom>
+    </sharingOwnerRules>
+</SharingRules>
