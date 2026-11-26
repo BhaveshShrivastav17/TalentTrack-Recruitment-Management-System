@@ -96,7 +96,10 @@ force-app/
         ├── tabs/
         └── triggers/
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> b52d67e (Fix README project structure formatting)
 ```
 ## Learning Outcomes
 This project demonstrates practical experience with Salesforce development, Apex programming, SOQL, Lightning Web Components, automation, security configuration, and recruitment business processes.
