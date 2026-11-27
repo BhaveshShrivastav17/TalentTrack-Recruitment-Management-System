@@ -282,6 +282,16 @@ TalentTrack uses Apex classes, trigger handlers, and test classes to implement r
 - DML operations manage record creation and updates.
 - Scheduled Apex automates deadline-related processing.
 - Apex test classes validate functionality and business rules.
+---
+
+## Salesforce Flows
+
+TalentTrack uses Salesforce Flows to automate application-related processes and reduce manual data entry.
+
+| Flow Name | Purpose |
+|---|---|
+| `Auto_Populate_Application_Date` | Automatically populates the application date when an application is created. |
+| `Update_Application_Status_to_Interview_Scheduled` | Updates the application status to indicate that an interview has been scheduled. |
 
 ## Security Implementation
 
