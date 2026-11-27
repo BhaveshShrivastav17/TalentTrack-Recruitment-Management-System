@@ -134,9 +134,17 @@ The Candidate object stores information about individuals applying for job oppor
 | Resume URL | `Resume_URL__c` | URL(255) |
 | Skills | `Skills__c` | Long Text Area |
 
+**Functionality**
 
+- Stores candidate profile and contact information.
+- Maintains educational qualifications, professional experience, and skills.
+- Stores candidate resume URLs.
+- Tracks candidate status throughout the recruitment process.
+- Helps the recruitment team manage and review candidate information.
 
+**Candidate Records**
 
+![TalentTrack Candidate Records](screenshots/candidate-records.png.png)
 
 ## Project Structure
 
