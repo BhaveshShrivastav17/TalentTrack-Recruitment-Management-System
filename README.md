@@ -177,6 +177,38 @@ The Application object manages job applications submitted by candidates. It conn
 
 ![TalentTrack Application Records](screenshots/application-record.png.png)
 
+### 4. Interview Object (`Interview__c`)
+
+**Purpose**
+
+The Interview object manages interview information associated with job applications and candidates. It stores interview schedules, interview types, interviewer details, interview scores, feedback, and interview status.
+
+**Key Fields**
+
+| Field Label | API Name | Data Type |
+|---|---|---|
+| Interview Name | `Name` | Text(80) |
+| Application | `Application__c` | Lookup(Application) |
+| Candidate | `Candidate__c` | Lookup(Candidate) |
+| Interview Date | `Interview_Date__c` | Date |
+| Interview Feedback | `Interview_Feedback__c` | Long Text Area |
+| Interview Score | `Interview_Score__c` | Number(2,1) |
+| Interview Status | `Interview_Status__c` | Picklist |
+| Interview Type | `Interview_Type__c` | Picklist |
+| Interviewer Name | `Interviewer_Name__c` | Text(100) |
+
+**Functionality**
+
+- Schedules and manages candidate interviews.
+- Links interviews with related applications and candidates.
+- Stores interview types, dates, and interviewer information.
+- Records interview scores and feedback.
+- Tracks interview status throughout the recruitment process.
+
+**Interview Records**
+
+![TalentTrack Interview Records](screenshots/interviews-record.png.png)
+
 ## Project Structure
 
 ```text
