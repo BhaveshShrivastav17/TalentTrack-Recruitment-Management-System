@@ -10,6 +10,20 @@ TalentTrack helps manage the recruitment lifecycle within Salesforce, from creat
 
 The application uses custom Salesforce objects, Apex triggers, Lightning Web Components, Flows, and reports to support recruitment operations.
 
+## Application Screenshots
+
+### 1. Job Listing Page
+
+![TalentTrack Job Listing](screenshots/talenttrack-job-listing.png)
+
+### 2. Additional Job Listings
+
+![TalentTrack Job Listings Continued](screenshots/talenttrack-job-listing-continued.png)
+
+### 3. Full Job Listing View
+
+![TalentTrack Job Listing Full View](screenshots/talenttrack-job-listing-full-view.png)
+
 ## Key Features
 
 - **Job Management:** Create and manage job openings, including job details and deadlines.
