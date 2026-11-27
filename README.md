@@ -260,6 +260,13 @@ TalentTrack uses Apex classes, trigger handlers, and test classes to implement r
 | `ApplicationTriggerHandler` | Handles business logic associated with Application records. |
 | `InterviewTriggerHandler` | Handles business logic associated with Interview records. |
 
+### Apex Triggers
+
+| Trigger Name | Related Object | Responsibility |
+|---|---|---|
+| `ApplicationTrigger` | `Application__c` | Invokes the Application trigger handler to process Application record events. |
+| `InterviewTrigger` | `Interview__c` | Invokes the Interview trigger handler to process Interview record events. |
+
 ### Apex Test Classes
 
 | Test Class Name | Responsibility |
