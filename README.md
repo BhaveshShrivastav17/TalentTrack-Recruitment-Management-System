@@ -71,16 +71,49 @@ The project uses four main custom objects:
 | `Interview__c` | Manages interview information |
 
 These objects work together to represent the recruitment lifecycle.
+---
 
-### Salesforce Configuration – Job Object
+## Custom Objects Documentation
+### 1. Job Object (`Job__c`)
 
-**1. Job Object – Details**
+**Purpose**
 
-![Job Object Details](screenshots/job-object-details.png)
+The Job object stores job vacancy information, including job titles, departments, required experience, salary, job descriptions, and application deadlines.
+**Key Fields**
 
-**2. Job Object – Fields & Relationships**
+| Field Label | API Name | Data Type |
+|---|---|---|
+| Job Name | `Name` | Text(80) |
+| Job Title | `Job_Title__c` | Text(100) |
+| Department | `Department__c` | Picklist |
+| Job Type | `Job_Type__c` | Picklist |
+| Experience Required | `Experience_Required__c` | Picklist |
+| Job Description | `Job_Description__c` | Long Text Area |
+| Job Status | `Job_Status__c` | Picklist |
+| Location | `Location__c` | Text(100) |
+| Salary | `Salary__c` | Currency(16,2) |
+| Posted Date | `Posted_Date__c` | Date |
+| Application Deadline | `Application_Deadline__c` | Date |
 
-![Job Object Fields](screenshots/job-object-fields.png)
+**Functionality**
+
+- Stores and manages job vacancy information.
+- Tracks job status, posting dates, and application deadlines.
+- Provides job information to the Career Page Lightning Web Component.
+- Displays available job openings to candidates.
+
+**Salesforce Configuration – Job Object**
+
+**1. Object Details**
+
+![Job Object Details](screenshots/job-object-details.png.png)
+
+**2. Fields & Relationships**
+
+![Job Object Fields](screenshots/job-object-fields.png.png)
+
+
+
 
 ## Project Structure
 
