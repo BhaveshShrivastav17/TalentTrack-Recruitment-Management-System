@@ -72,6 +72,16 @@ The project uses four main custom objects:
 
 These objects work together to represent the recruitment lifecycle.
 
+### Salesforce Configuration – Job Object
+
+**1. Job Object – Details**
+
+![Job Object Details](screenshots/job-object-details.png)
+
+**2. Job Object – Fields & Relationships**
+
+![Job Object Fields](screenshots/job-object-fields.png)
+
 ## Project Structure
 
 ```text
