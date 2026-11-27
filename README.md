@@ -292,6 +292,30 @@ TalentTrack uses Salesforce Flows to automate application-related processes and 
 |---|---|
 | `Auto_Populate_Application_Date` | Automatically populates the application date when an application is created. |
 | `Update_Application_Status_to_Interview_Scheduled` | Updates the application status to indicate that an interview has been scheduled. |
+---
+
+## Salesforce Sharing Rules
+
+TalentTrack uses Salesforce Sharing Rules to manage record-level access between recruitment team roles.
+
+### Sharing Rules Configuration
+
+| Object | Rule Type | Rule Name | Access Level |
+|---|---|---|---|
+| Application | Criteria-Based | `All_Application_Access_for_Recruitment_Team` | Edit |
+| Application | Owner-Based | `Recruitment_Team_Application_Access` | Edit |
+| Candidate | Criteria-Based | `All_Candidate_Access_for_Recruitment_Team` | Edit |
+| Candidate | Owner-Based | `Recruitment_Team_Candidates_Access` | Edit |
+| Interview | Criteria-Based | `All_Interview_Access_for_Recruitmnt_Team` | Edit |
+| Interview | Owner-Based | `Recruitment_Team_Interview_Access` | Edit |
+
+### Access Configuration
+
+- **Shared With:** Recruitment Manager role and internal subordinates.
+- **Owner-Based Sharing:** Shares records owned by the Recruiter role and internal subordinates.
+- **Criteria-Based Sharing:** Uses record field criteria to share matching records.
+- **Access Level:** Edit access is granted by the configured sharing rules.
+- **Job Object:** No custom sharing rules are configured.
 
 ## Security Implementation
 
