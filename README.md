@@ -112,6 +112,29 @@ The Job object stores job vacancy information, including job titles, departments
 
 ![Job Object Fields](screenshots/job-object-fields.png.png)
 
+### 2. Candidate Object (`Candidate__c`)
+
+**Purpose**
+
+The Candidate object stores information about individuals applying for job opportunities. It maintains candidate profiles, contact details, educational qualifications, professional experience, skills, and resume information.
+
+**Key Fields**
+
+| Field Label | API Name | Data Type |
+|---|---|---|
+| Candidate Name | `Name` | Text(80) |
+| First Name | `First_Name__c` | Text(50) |
+| Last Name | `Last_Name__c` | Text(50) |
+| Candidate Status | `Candidate_Status__c` | Picklist |
+| Current Location | `Current_Location__c` | Text(100) |
+| Education | `Education__c` | Picklist |
+| Email | `Email__c` | Email |
+| Phone | `Phone__c` | Phone |
+| Experience (Years) | `Experience_Years__c` | Number(3, 1) |
+| Resume URL | `Resume_URL__c` | URL(255) |
+| Skills | `Skills__c` | Long Text Area |
+
+
 
 
 
