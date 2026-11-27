@@ -146,6 +146,37 @@ The Candidate object stores information about individuals applying for job oppor
 
 ![TalentTrack Candidate Records](screenshots/candidate-records.png.png)
 
+### 3. Application Object (`Application__c`)
+
+**Purpose**
+
+The Application object manages job applications submitted by candidates. It connects candidates with job openings and tracks application dates, application status, expected salary, and interview-related information.
+
+**Key Fields**
+
+| Field Label | API Name | Data Type |
+|---|---|---|
+| Application Name | `Name` | Auto Number |
+| Application Date | `Application_Date__c` | Date |
+| Application Status | `Application_Status__c` | Picklist |
+| Candidate | `Candidate__c` | Lookup(Candidate) |
+| Job | `Job__c` | Lookup(Job) |
+| Expected Salary | `Expected_Salary__c` | Currency(16,2) |
+| Interview Date | `Interview_Date__c` | Date |
+| Interview Feedback | `Interview_Feedback__c` | Long Text Area |
+
+**Functionality**
+
+- Connects candidates with their selected job openings.
+- Tracks application dates and application status.
+- Stores candidates' expected salary information.
+- Maintains interview dates and feedback.
+- Helps the recruitment team monitor applications throughout the hiring process.
+
+**Application Records**
+
+![TalentTrack Application Records](screenshots/application-record.png.png)
+
 ## Project Structure
 
 ```text
