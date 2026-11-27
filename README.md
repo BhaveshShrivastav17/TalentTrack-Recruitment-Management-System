@@ -24,6 +24,14 @@ The application uses custom Salesforce objects, Apex triggers, Lightning Web Com
 
 ![TalentTrack Full Job Listing View](screenshots/talenttrack-job-listing-full-view.png.png)
 
+---
+
+## System Architecture
+
+The following diagram illustrates the overall architecture of TalentTrack, including its Salesforce custom objects, Apex classes, triggers, Flows, Lightning Web Components, Reports, and Dashboards.
+
+![TalentTrack System Architecture](screenshots/TalentTrack_Architecture.svg)
+
 ## Key Features
 
 - **Job Management:** Create and manage job openings, including job details and deadlines.
