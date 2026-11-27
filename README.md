@@ -12,17 +12,17 @@ The application uses custom Salesforce objects, Apex triggers, Lightning Web Com
 
 ## Application Screenshots
 
-### 1. Job Listing Page
+### 1. Career Page
 
-![TalentTrack Job Listing](screenshots/talenttrack-job-listing.png.png)
+![TalentTrack Career Page](screenshots/talenttrack-job-listing.png.png)
 
-### 2. Additional Job Listings
+### 2. Check Application Status
 
-![TalentTrack Job Listings Continued](screenshots/1.%20-%20talenttrack-job-listing-continued.png.png)
+![TalentTrack Check Application Status](screenshots/1.%20-%20talenttrack-job-listing-continued.png.png)
 
 ### 3. Full Job Listing View
 
-![TalentTrack Job Listing Full View](screenshots/talenttrack-job-listing-full-view.png.png)
+![TalentTrack Full Job Listing View](screenshots/talenttrack-job-listing-full-view.png.png)
 
 ## Key Features
 
