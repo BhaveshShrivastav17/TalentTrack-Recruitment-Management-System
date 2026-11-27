@@ -300,14 +300,16 @@ TalentTrack uses Salesforce Sharing Rules to manage record-level access between 
 
 ### Sharing Rules Configuration
 
-| Object | Rule Type | Rule Name | Access Level |
-|---|---|---|---|
-| Application | Criteria-Based | `All_Application_Access_for_Recruitment_Team` | Edit |
-| Application | Owner-Based | `Recruitment_Team_Application_Access` | Edit |
-| Candidate | Criteria-Based | `All_Candidate_Access_for_Recruitment_Team` | Edit |
-| Candidate | Owner-Based | `Recruitment_Team_Candidates_Access` | Edit |
-| Interview | Criteria-Based | `All_Interview_Access_for_Recruitmnt_Team` | Edit |
-| Interview | Owner-Based | `Recruitment_Team_Interview_Access` | Edit |
+| Object | Rule Type | Criteria | Shared With | Access |
+|---|---|---|---|---|
+| Application | Criteria-Based | `Name` is not blank | Recruitment Manager and internal subordinates | Edit |
+| Application | Owner-Based | Records owned by Recruiter and internal subordinates | Recruitment Manager and internal subordinates | Edit |
+| Candidate | Criteria-Based | `Last_Name__c` is not blank | Recruitment Manager and internal subordinates | Edit |
+| Candidate | Owner-Based | Records owned by Recruiter and internal subordinates | Recruitment Manager and internal subordinates | Edit |
+| Interview | Criteria-Based | `Name` is not blank | Recruitment Manager and internal subordinates | Edit |
+| Interview | Owner-Based | Records owned by Recruiter and internal subordinates | Recruitment Manager and internal subordinates | Edit |
+
+**Note:** The Job object currently has no custom sharing rules configured.
 
 ### Access Configuration
 
@@ -315,7 +317,6 @@ TalentTrack uses Salesforce Sharing Rules to manage record-level access between 
 - **Owner-Based Sharing:** Shares records owned by the Recruiter role and internal subordinates.
 - **Criteria-Based Sharing:** Uses record field criteria to share matching records.
 - **Access Level:** Edit access is granted by the configured sharing rules.
-- **Job Object:** No custom sharing rules are configured.
 
 ## Security Implementation
 
