@@ -208,6 +208,19 @@ The Interview object manages interview information associated with job applicati
 **Interview Records**
 
 ![TalentTrack Interview Records](screenshots/interviews-record.png.png)
+---
+
+## Reports & Dashboards
+
+TalentTrack includes Salesforce Reports and Dashboards to help monitor recruitment activities and visualize important recruitment metrics.
+
+### Reports
+
+![TalentTrack Reports](screenshots/reports.png.png)
+
+### Dashboard
+
+![TalentTrack Dashboard](screenshots/dashboard.png.png)
 
 ## Project Structure
 
