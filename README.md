@@ -244,16 +244,37 @@ force-app/
 
 ## Apex Development
 
-The project uses Apex classes, triggers, and test classes to implement recruitment business logic.
+TalentTrack uses Apex classes, trigger handlers, and test classes to implement recruitment business logic and automate application processes.
 
-Key development areas include:
+### Apex Classes
 
-- Trigger-based automation.
-- Separation of trigger logic using handler classes.
-- SOQL queries and DML operations.
-- Scheduled Apex processing.
-- Exception handling and business rule enforcement.
-- Apex unit testing.
+| Class Name | Responsibility |
+|---|---|
+| `JobListingController` | Provides job listing data and application-related operations to the Job Listing Lightning Web Component. |
+| `JobDeadlineScheduler` | Handles scheduled processing of job application deadlines. |
+
+### Trigger Handler Classes
+
+| Class Name | Responsibility |
+|---|---|
+| `ApplicationTriggerHandler` | Handles business logic associated with Application records. |
+| `InterviewTriggerHandler` | Handles business logic associated with Interview records. |
+
+### Apex Test Classes
+
+| Test Class Name | Responsibility |
+|---|---|
+| `ApplicationTriggerTest` | Tests Application trigger functionality and business rules. |
+| `InterviewTriggerTest` | Tests Interview trigger functionality and business rules. |
+| `JobDeadlineSchedulerTest` | Tests scheduled job deadline processing. |
+
+### Development Practices
+
+- Trigger logic is separated into handler classes.
+- SOQL queries retrieve Salesforce records.
+- DML operations manage record creation and updates.
+- Scheduled Apex automates deadline-related processing.
+- Apex test classes validate functionality and business rules.
 
 ## Security Implementation
 
